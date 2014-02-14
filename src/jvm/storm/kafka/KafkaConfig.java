@@ -2,6 +2,7 @@ package storm.kafka;
 
 import backtype.storm.spout.MultiScheme;
 import backtype.storm.spout.RawMultiScheme;
+import backtype.storm.spout.Scheme;
 
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ public class KafkaConfig implements Serializable {
     public int fetchSizeBytes = 1024 * 1024;
     public int socketTimeoutMs = 10000;
     public int bufferSizeBytes = 1024 * 1024;
+    public Scheme keyScheme = null;
     public MultiScheme scheme = new RawMultiScheme();
     public boolean forceFromStart = false;
     public long startOffsetTime = kafka.api.OffsetRequest.EarliestTime();

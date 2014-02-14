@@ -157,9 +157,22 @@ public class TridentKafkaEmitter {
     private void emit(TridentCollector collector, Message msg) {
         Iterable<List<Object>> values =
                 _config.scheme.deserialize(Utils.toByteArray(msg.payload()));
-        if (values != null) {
-            for (List<Object> value : values) {
-                collector.emit(value);
+
+        if (_config.keyScheme != null) {
+            List<Object> keys =
+                    _config.keyScheme.deserialize(Utils.toByteArray(msg.key()));
+
+            if (values != null) {
+                for (List<Object> value : values) {
+                    value.addAll(keys);
+                    collector.emit(value);
+                }
+            }
+        } else {
+            if (values != null) {
+                for (List<Object> value : values) {
+                    collector.emit(value);
+                }
             }
         }
     }

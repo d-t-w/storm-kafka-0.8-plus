@@ -5,6 +5,8 @@ import backtype.storm.tuple.Fields;
 import storm.kafka.Partition;
 import storm.trident.spout.IOpaquePartitionedTridentSpout;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -31,6 +33,12 @@ public class OpaqueTridentKafkaSpout implements IOpaquePartitionedTridentSpout<G
 
     @Override
     public Fields getOutputFields() {
+        if (_config.keyScheme != null) {
+            List<String> fields = new ArrayList<String>();
+            fields.addAll(_config.scheme.getOutputFields().toList());
+            fields.addAll(_config.keyScheme.getOutputFields().toList());
+            return new Fields(fields);
+        }
         return _config.scheme.getOutputFields();
     }
 
